@@ -4,10 +4,24 @@
   font-size: 0.9rem;
 }
 
+/* Small inline icon in status area inherits currentColor */
+.status__icon {
+  width: 18px;
+  height: 18px;
+  margin: 0 6px 0 2px;
+  vertical-align: -3px;
+  color: currentColor;
+}
+
 /* Improve focus visibility globally for keyboard users */
 :focus-visible {
   outline: none;
   box-shadow: var(--focus-ring);
   border-radius: 10px;
   transition: box-shadow 120ms ease-out;
+}
+
+/* Subtle hover for squares via class selector if applied */
+.square:hover:not([disabled]) {
+  filter: brightness(0.995);
 }

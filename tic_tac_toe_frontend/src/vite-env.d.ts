@@ -2,6 +2,7 @@
 
 // PUBLIC_INTERFACE
 declare module '*.svg' {
-  const content: string;
-  export default content;
+  // Vite will convert imported SVGs to URL strings by default
+  const src: string;
+  export default src;
 }

@@ -6,7 +6,7 @@ export interface BoardProps {
   board: BoardState;
   winningLine: number[] | null;
   disabled?: boolean;
-  onPlay: (index: number) => void;
+  onPlay: (_: number) => void;
 }
 
 // PUBLIC_INTERFACE
@@ -34,15 +34,16 @@ export const Board: React.FC<BoardProps> = ({
         border: '1px solid rgba(17,24,39,0.06)',
       }}
     >
-      {board.map((value, idx) => (
+      {board.map((cell, index) => (
         <Square
-          key={idx}
-          index={idx}
-          value={value}
-          isWinning={isWinningIndex(idx)}
-          disabled={disabled || Boolean(value)}
-          onClick={() => onPlay(idx)}
-          ariaLabel={`Cell ${idx + 1}, ${value ? value : 'empty'}.`}
+          key={index}
+          value={cell}
+          isWinning={isWinningIndex(index)}
+          disabled={disabled || Boolean(cell)}
+          onClick={() => onPlay(index)}
+          ariaLabel={`Cell ${index + 1}, ${
+            cell === 'X' ? 'Knight' : cell === 'O' ? 'Queen' : 'empty'
+          }.`}
         />
       ))}
     </div>

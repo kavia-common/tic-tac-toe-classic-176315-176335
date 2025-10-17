@@ -1,5 +1,7 @@
 import React from 'react';
 import { GameMode, Player } from '../types';
+import KnightIcon from '../assets/icons/knight.svg';
+import QueenIcon from '../assets/icons/queen.svg';
 
 export interface ControlsProps {
   mode: GameMode;
@@ -87,10 +89,22 @@ export const Controls: React.FC<ControlsProps> = ({
               ? '1px solid rgba(37,99,235,0.35)'
               : '1px solid rgba(5,150,105,0.35)',
           color: firstPlayer === 'X' ? 'var(--primary)' : '#0f766e',
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: 8,
         }}
         aria-label="Toggle first player"
       >
-        First: {firstPlayer}
+        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+          First:
+          <img
+            src={firstPlayer === 'X' ? KnightIcon : QueenIcon}
+            alt=""
+            aria-hidden="true"
+            style={{ width: 18, height: 18, verticalAlign: 'middle', color: 'currentColor' }}
+          />
+          <span aria-hidden="true">{firstPlayer === 'X' ? 'Knight' : 'Queen'}</span>
+        </span>
       </button>
 
       <button

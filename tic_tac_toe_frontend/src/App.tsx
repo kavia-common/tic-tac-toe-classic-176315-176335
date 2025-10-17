@@ -6,6 +6,8 @@ import { GameMode, Player, BoardState } from './types';
 import { checkWinner, getEmptyIndices, isDraw, nextPlayer } from './lib/game';
 import { computeBestMove } from './lib/ai';
 import Logo from './assets/logo.svg';
+import KnightIcon from './assets/icons/knight.svg';
+import QueenIcon from './assets/icons/queen.svg';
 
 // PUBLIC_INTERFACE
 export default function App() {
@@ -21,18 +23,20 @@ export default function App() {
   const winner = useMemo(() => checkWinner(board), [board]);
   const draw = useMemo(() => isDraw(board), [board]);
 
-  /* eslint-disable-next-line react-hooks/exhaustive-deps */
+  // Sync derived state from winner/draw safely
   useEffect(() => {
     if (winner) {
       setGameOver(true);
       setWinningLine(winner.line);
-    } else if (draw) {
+      return;
+    }
+    if (draw) {
       setGameOver(true);
       setWinningLine(null);
-    } else {
-      setGameOver(false);
-      setWinningLine(null);
+      return;
     }
+    setGameOver(false);
+    setWinningLine(null);
   }, [winner, draw]);
 
   // CPU move on its turn
@@ -81,16 +85,29 @@ export default function App() {
   useEffect(() => {
     // When first player changes, reset and set turn to first
     reset();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [firstPlayer]);
 
-  const statusText = winner
-    ? `Winner: ${winner.player}`
-    : draw
-    ? 'Draw'
-    : mode === 'cpu' && current === 'O'
-    ? 'Computer thinking...'
-    : `Turn: ${current}`;
+  const playerName = (p: Player) => (p === 'X' ? 'Knight' : 'Queen');
+  const playerIcon = (p: Player) =>
+    p === 'X' ? (
+      <img src={KnightIcon} alt="" aria-hidden="true" className="status__icon" />
+    ) : (
+      <img src={QueenIcon} alt="" aria-hidden="true" className="status__icon" />
+    );
+
+  const statusContent = winner ? (
+    <span>
+      Winner: {playerIcon(winner.player)} <span className="visually-hidden">{playerName(winner.player)}</span> {playerName(winner.player)}
+    </span>
+  ) : draw ? (
+    'Draw'
+  ) : mode === 'cpu' && current === 'O' ? (
+    <span>Computer thinking...</span>
+  ) : (
+    <span>
+      Turn: {playerIcon(current)} <span className="visually-hidden">{playerName(current)}</span> {playerName(current)}
+    </span>
+  );
 
   const statusClass =
     winner ? 'status status--win' : draw ? 'status status--draw' : 'status';
@@ -104,7 +121,7 @@ export default function App() {
         </header>
 
         <p className={statusClass} role="status" aria-live="polite">
-          {statusText}
+          {statusContent}
         </p>
 
         <Board
@@ -125,7 +142,7 @@ export default function App() {
           />
           <p className="helper-text" aria-hidden="true">
             {mode === 'cpu'
-              ? `You are ${firstPlayer === 'X' ? 'X' : 'O'}`
+              ? `You are ${firstPlayer === 'X' ? 'Knight' : 'Queen'}`
               : `${getEmptyIndices(board).length} moves left`}
           </p>
         </div>
