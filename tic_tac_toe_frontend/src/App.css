@@ -1,0 +1,13 @@
+.helper-text {
+  margin-top: 8px;
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+/* Improve focus visibility globally for keyboard users */
+:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+  border-radius: 10px;
+  transition: box-shadow 120ms ease-out;
+}
